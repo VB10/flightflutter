@@ -1,5 +1,6 @@
-import 'package:flightflutter/googe_maps/googe_maps.dart';
 import 'package:flutter/material.dart';
+
+import 'googe_maps/view/googe_maps.dart';
 
 void main() => runApp(MyApp());
 

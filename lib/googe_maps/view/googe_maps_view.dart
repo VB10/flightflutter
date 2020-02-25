@@ -1,15 +1,43 @@
+import 'package:flightflutter/googe_maps/model/flight_map_model.dart';
+import 'package:flightflutter/googe_maps/vm/maps_vm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import './googe_maps_view_model.dart';
-import 'flight_map_model.dart';
+import '../googe_maps_view_model.dart';
 
 class GoogeMapsView extends GoogeMapsViewModel {
+  final MapsViewModel mapsViewModel = MapsViewModel();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: <Widget>[buildGoogleMap, bottomListView],
+        children: <Widget>[
+          buildGoogleMap,
+          bottomListView,
+          buildPositionedAppBar(context),
+        ],
+      ),
+    );
+  }
+
+  Positioned buildPositionedAppBar(BuildContext context) {
+    return Positioned(
+      height: pageHeight(context) * 0.15,
+      top: 20,
+      left: 0,
+      right: 0,
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: Observer(
+          builder: (_) => Text(
+            mapsViewModel.title ?? "Hello2",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
       ),
     );
   }
@@ -22,7 +50,7 @@ class GoogeMapsView extends GoogeMapsViewModel {
 
   Widget get bottomListView => Positioned(
         bottom: 20,
-        left: 20,
+        left: -(pageWidth(context) * 0.05),
         right: 5,
         height: 100,
         child: flightList.isEmpty ? loadingWidget : listViewFlights(),
@@ -33,18 +61,21 @@ class GoogeMapsView extends GoogeMapsViewModel {
           valueColor: AlwaysStoppedAnimation(Colors.blue),
         ),
       );
-  ListView listViewFlights() {
-    return ListView.builder(
+
+  Widget listViewFlights() {
+    return PageView.builder(
+        controller: PageController(viewportFraction: 0.8),
         scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
         itemCount: flightList.length,
+        onPageChanged: (index) {
+          mapsViewModel.changeAppBarName(flightList[index].country);
+          navigateToRoot(index);
+        },
         itemBuilder: (context, index) {
           return SizedBox(
             width: MediaQuery.of(context).size.width - 100,
             child: Card(
               child: ListTile(
-                onTap: () => controller.animateCamera(
-                    CameraUpdate.newLatLng(flightList[index].latlong)),
                 title: Text(flightList[index].country),
               ),
             ),
