@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FlightMap {
@@ -20,6 +22,19 @@ class FlightMap {
     data['long'] = this.long;
     return data;
   }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is FlightMap &&
+        o.country == country &&
+        o.lat == lat &&
+        o.long == long;
+  }
+
+  @override
+  int get hashCode => country.hashCode ^ lat.hashCode ^ long.hashCode;
 }
 
 extension FligtLatLong on FlightMap {
