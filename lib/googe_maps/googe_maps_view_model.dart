@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flightflutter/core/device/constants.dart';
+import 'package:flightflutter/googe_maps/view/googe_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import './googe_maps.dart';
-import '../core/device/constants.dart';
-import 'flight_map_model.dart';
+import 'model/flight_map_model.dart';
 
 abstract class GoogeMapsViewModel extends State<GoogeMaps> {
   BitmapDescriptor dogIcon;
@@ -17,6 +17,13 @@ abstract class GoogeMapsViewModel extends State<GoogeMaps> {
   List<FlightMap> flightList = [];
   final CameraPosition kLake =
       CameraPosition(target: AppConstant.TURKEY_CENTER_LAT_LONG, zoom: 7);
+
+  void navigateToRoot(int index) {
+    controller.animateCamera(CameraUpdate.newLatLng(flightList[index].latlong));
+  }
+
+  double pageWidth(BuildContext context) => MediaQuery.of(context).size.width;
+  double pageHeight(BuildContext context) => MediaQuery.of(context).size.height;
 
   Future initMapItemList() async {
     final response = await http.get("$firebaseServiceEndPoint.json");
