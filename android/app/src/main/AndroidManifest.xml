@@ -10,7 +10,7 @@
         android:label="flightflutter"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBAv14sk07bZIHcGbOcOcVi4jtBI5Gea5Q"/>
+            android:value="AIzaSyCuMGp3MIDb8rp1sr1YknVTyTRNt8ewX0g"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

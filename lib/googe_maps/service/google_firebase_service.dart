@@ -1,32 +1,31 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flightflutter/googe_maps/model/flight_map_model.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
-main() {
-  final firebaseServiceEndPoint = "https://fluttertr-ead5c.firebaseio.com/maps";
+import '../../core/base/base_service.dart';
+import '../model/flight_map_model.dart';
+import 'IGoogleFirebaseService.dart';
 
-  test('firebase map test', () async {
-    final response = await http.get("$firebaseServiceEndPoint.json");
-
-    var responseData;
+class GoogleFirebaseService extends BaseService
+    implements IGoogleFirebaseService {
+  Future initMapItemList() async {
+    final response = await http.get(mapsPath);
     switch (response.statusCode) {
       case HttpStatus.ok:
         final jsonData = jsonDecode(response.body);
         if (jsonData is List) {
-          responseData = jsonData
+          final data = jsonData
               .map((e) => FlightMap.fromJson(e))
               .cast<FlightMap>()
               .toList();
+          return data;
         } else if (jsonData is Map) {
+          return FlightMap.fromJson(jsonData);
         } else
           return jsonData;
         break;
       default:
     }
-
-    expect(responseData is List, true);
-  });
+  }
 }
