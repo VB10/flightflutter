@@ -1,10 +1,15 @@
-import 'package:flightflutter/googe_maps/model/flight_map_model.dart';
-import 'package:flightflutter/googe_maps/vm/maps_vm.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../googe_maps_view_model.dart';
+import '../../core/device/constants.dart';
+import '../../core/view/widgets/card/pet_card.dart';
+import '../../core/view/widgets/divider/row_divider.dart';
+import '../../core/view/widgets/image/cached_image.dart';
+import '../model/flight_map_model.dart';
+import '../vm/googe_maps_view_model.dart';
+import '../vm/maps_vm.dart';
 
 class GoogeMapsView extends GoogeMapsViewModel {
   final MapsViewModel mapsViewModel = MapsViewModel();
@@ -34,7 +39,7 @@ class GoogeMapsView extends GoogeMapsViewModel {
         centerTitle: true,
         title: Observer(
           builder: (_) => Text(
-            mapsViewModel.title ?? "Hello2",
+            mapsViewModel.title ?? "",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -72,16 +77,46 @@ class GoogeMapsView extends GoogeMapsViewModel {
           navigateToRoot(index);
         },
         itemBuilder: (context, index) {
-          return SizedBox(
-            width: MediaQuery.of(context).size.width - 100,
-            child: Card(
-              child: ListTile(
-                title: Text(flightList[index].country),
-              ),
-            ),
-          );
+          return buildPetCard(flightList[index]);
         });
   }
+
+  Widget buildPetCard(FlightMap item) {
+    return PetCard(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          enableDrag: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+          builder: (context) {
+            return _bottomSheet(item.detail);
+          },
+        );
+      },
+      imageUrl: item.detail.photoUrl,
+      title: item.country,
+    );
+  }
+
+  Widget _bottomSheet(Detail detail) => Column(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          RowDivider(indent: 0.45),
+          FLightCacheImage(
+            imageUrl: detail.photoUrl,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: AutoSizeText(
+                detail.description,
+                maxFontSize: 12,
+                minFontSize: 10,
+              ),
+            ),
+          )
+        ],
+      );
 
   Widget get buildGoogleMap => GoogleMap(
         mapType: MapType.normal,
@@ -97,7 +132,7 @@ class GoogeMapsView extends GoogeMapsViewModel {
     return FloatingActionButton(
       onPressed: () {
         controller.animateCamera(
-            CameraUpdate.newLatLng(LatLng(40.9906621, 29.0200943)));
+            CameraUpdate.newLatLng(AppConstant.TURKEY_CENTER_LAT_LONG));
       },
     );
   }
@@ -120,8 +155,10 @@ extension _GoogleMapsMarker on GoogeMapsView {
         createLocalImageConfiguration(context);
     var bitmap = await BitmapDescriptor.fromAssetImage(
         imageConfiguration, 'assets/images/dog.png');
-    dogIcon = bitmap;
-    setState(() {});
+
+    setState(() {
+      dogIcon = bitmap;
+    });
     // print(dogIcon);
   }
 }
