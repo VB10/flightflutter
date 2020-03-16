@@ -1,7 +1,7 @@
+import 'package:flightflutter/googe_maps/view/googe_maps_view.dart';
 import 'package:flutter/material.dart';
 
 import 'core/device/theme/theme.dart';
-import 'googe_maps/view/googe_maps.dart';
 
 void main() => runApp(MyApp());
 

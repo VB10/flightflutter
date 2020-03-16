@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flightflutter/core/base/base_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,10 +9,14 @@ import '../../core/view/widgets/card/pet_card.dart';
 import '../../core/view/widgets/divider/row_divider.dart';
 import '../../core/view/widgets/image/cached_image.dart';
 import '../model/flight_map_model.dart';
-import '../vm/googe_maps_view_model.dart';
 import '../vm/maps_vm.dart';
 
-class GoogeMapsView extends GoogeMapsViewModel {
+class GoogeMaps extends StatefulWidget {
+  @override
+  GoogeMapsView createState() => new GoogeMapsView();
+}
+
+class GoogeMapsView extends BaseState<GoogeMaps> {
   final MapsViewModel mapsViewModel = MapsViewModel();
 
   @override
@@ -29,7 +34,7 @@ class GoogeMapsView extends GoogeMapsViewModel {
 
   Positioned buildPositionedAppBar(BuildContext context) {
     return Positioned(
-      height: pageHeight(context) * 0.15,
+      height: pageHeightDyanmic(0.1),
       top: 20,
       left: 0,
       right: 0,
@@ -50,15 +55,19 @@ class GoogeMapsView extends GoogeMapsViewModel {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => initMapItemList());
+    mapsViewModel.setContext(context);
   }
 
   Widget get bottomListView => Positioned(
         bottom: 20,
-        left: -(pageWidth(context) * 0.05),
+        left: -(pageWidthDyanmic(0.1)),
         right: 5,
         height: 100,
-        child: flightList.isEmpty ? loadingWidget : listViewFlights(),
+        child: Observer(
+          builder: (context) => mapsViewModel.flightList.isEmpty
+              ? loadingWidget
+              : listViewFlights(),
+        ),
       );
 
   Widget get loadingWidget => Center(
@@ -71,13 +80,10 @@ class GoogeMapsView extends GoogeMapsViewModel {
     return PageView.builder(
         controller: PageController(viewportFraction: 0.8),
         scrollDirection: Axis.horizontal,
-        itemCount: flightList.length,
-        onPageChanged: (index) {
-          mapsViewModel.changeAppBarName(flightList[index].country);
-          navigateToRoot(index);
-        },
+        itemCount: mapsViewModel.flightList.length,
+        onPageChanged: (index) => mapsViewModel.changePageViewCardIndex(index),
         itemBuilder: (context, index) {
-          return buildPetCard(flightList[index]);
+          return buildPetCard(mapsViewModel.flightList[index]);
         });
   }
 
@@ -118,20 +124,19 @@ class GoogeMapsView extends GoogeMapsViewModel {
         ],
       );
 
-  Widget get buildGoogleMap => GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: kLake,
-        onMapCreated: (map) async {
-          controller = map;
-          await createMarkerImageFromAsset(context);
-        },
-        markers: createMarker(),
+  Widget get buildGoogleMap => Observer(
+        builder: (context) => GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: mapsViewModel.kLake,
+          onMapCreated: (map) => mapsViewModel.mapsInit(map),
+          markers: createMarker(),
+        ),
       );
 
   FloatingActionButton buildFloatingActionButton() {
     return FloatingActionButton(
       onPressed: () {
-        controller.animateCamera(
+        mapsViewModel.controller.animateCamera(
             CameraUpdate.newLatLng(AppConstant.TURKEY_CENTER_LAT_LONG));
       },
     );
@@ -140,25 +145,13 @@ class GoogeMapsView extends GoogeMapsViewModel {
 
 extension _GoogleMapsMarker on GoogeMapsView {
   Set<Marker> createMarker() {
-    return flightList
+    return mapsViewModel.flightList
         .map((e) => Marker(
             markerId: MarkerId(e.hashCode.toString()),
             position: e.latlong,
-            icon: dogIcon,
+            icon: mapsViewModel.dogIcon,
             zIndex: 10,
             infoWindow: InfoWindow(title: e.country)))
         .toSet();
-  }
-
-  Future<void> createMarkerImageFromAsset(BuildContext context) async {
-    final ImageConfiguration imageConfiguration =
-        createLocalImageConfiguration(context);
-    var bitmap = await BitmapDescriptor.fromAssetImage(
-        imageConfiguration, 'assets/images/dog.png');
-
-    setState(() {
-      dogIcon = bitmap;
-    });
-    // print(dogIcon);
   }
 }

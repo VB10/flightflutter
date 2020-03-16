@@ -26,6 +26,23 @@ mixin _$MapsViewModel on MapsViewBase, Store {
     }, _$titleAtom, name: '${_$titleAtom.name}_set');
   }
 
+  final _$flightListAtom = Atom(name: 'MapsViewBase.flightList');
+
+  @override
+  List<FlightMap> get flightList {
+    _$flightListAtom.context.enforceReadPolicy(_$flightListAtom);
+    _$flightListAtom.reportObserved();
+    return super.flightList;
+  }
+
+  @override
+  set flightList(List<FlightMap> value) {
+    _$flightListAtom.context.conditionallyRunInAction(() {
+      super.flightList = value;
+      _$flightListAtom.reportChanged();
+    }, _$flightListAtom, name: '${_$flightListAtom.name}_set');
+  }
+
   final _$MapsViewBaseActionController = ActionController(name: 'MapsViewBase');
 
   @override
@@ -40,7 +57,8 @@ mixin _$MapsViewModel on MapsViewBase, Store {
 
   @override
   String toString() {
-    final string = 'title: ${title.toString()}';
+    final string =
+        'title: ${title.toString()},flightList: ${flightList.toString()}';
     return '{$string}';
   }
 }
