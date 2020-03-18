@@ -26,6 +26,23 @@ mixin _$MapsViewModel on MapsViewBase, Store {
     }, _$titleAtom, name: '${_$titleAtom.name}_set');
   }
 
+  final _$dogIconAtom = Atom(name: 'MapsViewBase.dogIcon');
+
+  @override
+  BitmapDescriptor get dogIcon {
+    _$dogIconAtom.context.enforceReadPolicy(_$dogIconAtom);
+    _$dogIconAtom.reportObserved();
+    return super.dogIcon;
+  }
+
+  @override
+  set dogIcon(BitmapDescriptor value) {
+    _$dogIconAtom.context.conditionallyRunInAction(() {
+      super.dogIcon = value;
+      _$dogIconAtom.reportChanged();
+    }, _$dogIconAtom, name: '${_$dogIconAtom.name}_set');
+  }
+
   final _$flightListAtom = Atom(name: 'MapsViewBase.flightList');
 
   @override
@@ -58,7 +75,7 @@ mixin _$MapsViewModel on MapsViewBase, Store {
   @override
   String toString() {
     final string =
-        'title: ${title.toString()},flightList: ${flightList.toString()}';
+        'title: ${title.toString()},dogIcon: ${dogIcon.toString()},flightList: ${flightList.toString()}';
     return '{$string}';
   }
 }

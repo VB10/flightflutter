@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flight App',
+      title: 'Petti',
       home: GoogeMaps(),
       theme: myTheme,
     );
