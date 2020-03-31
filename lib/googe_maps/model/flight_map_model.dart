@@ -1,33 +1,28 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'flight_map_model.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.pascal)
 class FlightMap {
   String country;
   Detail detail;
+  @JsonKey(name: "ahmet")
   double lat;
   double long;
 
   FlightMap({this.country, this.detail, this.lat, this.long});
 
-  FlightMap.fromJson(Map<String, dynamic> json) {
-    country = json['country'];
-    detail =
-        json['detail'] != null ? new Detail.fromJson(json['detail']) : null;
-    lat = json['lat'];
-    long = json['long'];
-  }
+  factory FlightMap.fromJson(Map<String, dynamic> json) =>
+      _$FlightMapFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['country'] = this.country;
-    if (this.detail != null) {
-      data['detail'] = this.detail.toJson();
-    }
-    data['lat'] = this.lat;
-    data['long'] = this.long;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$FlightMapToJson(this);
 }
 
+@JsonSerializable()
 class Detail {
   String description;
   String name;
@@ -37,49 +32,21 @@ class Detail {
 
   Detail({this.description, this.name, this.photoUrl, this.status, this.tags});
 
-  Detail.fromJson(Map<String, dynamic> json) {
-    description = json['description'];
-    name = json['name'];
-    photoUrl = json['photoUrl'];
-    status = json['status'];
-    if (json['tags'] != null) {
-      tags = new List<Tags>();
-      json['tags'].forEach((v) {
-        tags.add(new Tags.fromJson(v));
-      });
-    }
-  }
+  factory Detail.fromJson(Map<String, dynamic> json) => _$DetailFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['description'] = this.description;
-    data['name'] = this.name;
-    data['photoUrl'] = this.photoUrl;
-    data['status'] = this.status;
-    if (this.tags != null) {
-      data['tags'] = this.tags.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$DetailToJson(this);
 }
 
+@JsonSerializable()
 class Tags {
   int id;
   String name;
 
   Tags({this.id, this.name});
 
-  Tags.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-  }
+  factory Tags.fromJson(Map<String, dynamic> json) => _$TagsFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$TagsToJson(this);
 }
 
 extension FligtLatLong on FlightMap {
