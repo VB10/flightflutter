@@ -1,9 +1,8 @@
-import 'package:flightflutter/core/init/navigation/navigation_service.dart';
-import 'package:flightflutter/core/init/navigation/navigator_route_service.dart';
-import 'package:flightflutter/googe_maps/view/googe_maps_view.dart';
 import 'package:flutter/material.dart';
 
 import 'core/device/theme/theme.dart';
+import 'core/init/navigation/navigation_service.dart';
+import 'core/init/navigation/navigator_route_service.dart';
 
 void main() => runApp(MyApp());
 

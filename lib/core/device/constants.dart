@@ -3,6 +3,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class AppConstant {
   static const TURKEY_CENTER_LAT_LONG = LatLng(38.9637, 35.2433);
   static const API_SERVICE_URL = "https://fluttertr-ead5c.firebaseio.com";
+
+  static const DOG_SVG = "assets/images/svg/dog_walking.svg";
+  static const DOG_LOTTIE = "dog_walking";
 }
 
 class RouteConstants {
