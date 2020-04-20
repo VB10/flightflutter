@@ -34,7 +34,7 @@ class SplashView extends SplashViewModel {
       body: Column(
         children: <Widget>[
           Spacer(flex: 2),
-          Expanded(flex: 4, child: LottieCustomWidget(path: "cute_doggie")),
+          Expanded(flex: 4, child: LottieCustomWidget(path: "paws_animation")),
           Expanded(flex: 4, child: buildRowMessage())
         ],
       ),
