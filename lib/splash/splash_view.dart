@@ -14,6 +14,7 @@ class SplashView extends SplashViewModel {
     super.initState();
 
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    handlerNotification();
     Future.microtask(() async {
       controlToken("");
 

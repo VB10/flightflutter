@@ -33,6 +33,7 @@ dependencies:
   auto_size_text: ^2.1.0
   flutter_svg: ^0.17.3+1
   lottie: ^0.3.3
+  firebase_messaging: ^6.0.13
 
 dev_dependencies:
   flutter_test:
