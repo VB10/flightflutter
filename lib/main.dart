@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flightflutter/core/device/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'core/device/theme/theme.dart';
@@ -7,7 +9,12 @@ import 'core/init/navigation/navigator_route_service.dart';
 
 Future<void> main() async {
   await init();
-  runApp(MyApp());
+  runApp(
+    EasyLocalization(
+        child: MyApp(),
+        supportedLocales: [AppConstant.AR_LOCALE],
+        path: AppConstant.LANG_PATH),
+  );
 }
 
 FirebaseMessaging firebaseMessaging = FirebaseMessaging();

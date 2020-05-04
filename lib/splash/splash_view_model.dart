@@ -6,6 +6,8 @@ import './splash.dart';
 
 abstract class SplashViewModel extends State<Splash> {
   // Add your state and logic here
+  double imageOpacity = 0;
+  bool showIndicator = false;
 
   Future<void> controlToken(args) async {
     await Future.delayed(Duration(seconds: 3));
@@ -14,6 +16,19 @@ abstract class SplashViewModel extends State<Splash> {
 
   void nagigateToHome() {
     NavigationService.instance.navigateToReset(RouteConstants.HOME);
+  }
+
+  void showIndicatorSplashView() {
+    Future.microtask(() async {
+      controlToken("");
+      setState(() {
+        imageOpacity = 1;
+      });
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {
+        showIndicator = true;
+      });
+    });
   }
 
   void handlerNotification() {
