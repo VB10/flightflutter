@@ -12,7 +12,7 @@ Future<void> main() async {
   runApp(
     EasyLocalization(
         child: MyApp(),
-        supportedLocales: [AppConstant.AR_LOCALE],
+        supportedLocales: AppConstant.SUPPORTED_LOCALE,
         path: AppConstant.LANG_PATH),
   );
 }

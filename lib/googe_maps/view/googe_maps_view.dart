@@ -1,5 +1,10 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flightflutter/core/base/base_state.dart';
+import 'package:flightflutter/core/init/locale_keys.g.dart';
+import 'package:flightflutter/core/view/widgets/text/locale_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,12 +27,31 @@ class GoogeMapsView extends BaseState<GoogeMaps> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(),
       body: Stack(
         children: <Widget>[
           buildGoogleMap,
           bottomListView,
           buildPositionedAppBar(context),
         ],
+      ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      title: LocaleText(text: LocaleKeys.project_name),
+      actions: [buildFlatButtonLanguage],
+    );
+  }
+
+  FlatButton get buildFlatButtonLanguage {
+    return FlatButton(
+      onPressed: () => mapsViewModel.changeLanguage(),
+      child: Text(
+        context.locale.languageCode,
+        style:
+            Theme.of(context).textTheme.headline5.copyWith(color: Colors.white),
       ),
     );
   }
