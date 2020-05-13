@@ -8,6 +8,11 @@ class AppConstant {
   static const DOG_SVG = "assets/images/svg/dog_walking.svg";
   static const DOG_LOTTIE = "dog_walking";
 
+  static const SUPPORTED_LOCALE = [
+    AppConstant.EN_LOCALE,
+    AppConstant.AR_LOCALE
+  ];
+
   static const TR_LOCALE = Locale("tr", "TR");
   static const AR_LOCALE = Locale("ar", "DZ");
   static const EN_LOCALE = Locale("en", "US");

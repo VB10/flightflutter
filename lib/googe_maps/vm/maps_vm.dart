@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flightflutter/core/device/constants.dart';
 import 'package:flightflutter/googe_maps/model/flight_map_model.dart';
 import 'package:flightflutter/googe_maps/service/google_firebase_service.dart';
@@ -27,6 +30,11 @@ abstract class MapsViewBase with Store {
   void changeAppBarName(String text) {
     print(text);
     title = text;
+  }
+
+  void changeLanguage() {
+    context.locale = AppConstant.SUPPORTED_LOCALE[
+        Random().nextInt(AppConstant.SUPPORTED_LOCALE.length)];
   }
 
   void setContext(BuildContext context) {

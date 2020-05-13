@@ -4,5 +4,9 @@
         "petPageOpen": "انظر محبوبتك",
         "msg_named": "مرحبًا يا {} مرحبًا"
 
+    },
+    "project": {
+        "name": "أهلا بك Petti !"
     }
+
 }
